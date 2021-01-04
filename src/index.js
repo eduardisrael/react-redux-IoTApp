@@ -7,7 +7,7 @@ import "./index.css";
 
 render(
   <Router>
-    <App/>
+    <App />
   </Router>,
   document.getElementById("app")
 );
