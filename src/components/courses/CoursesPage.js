@@ -21,11 +21,11 @@ class CoursesPage extends React.Component {
 
   /*field class, arrow function evitar problema de enlace controladores de eventos & component class
   evitar que pagina reload
-  Dispatch: permite despachar nuestras acciones
+  We dont need to call dispatch here since thats being handled in mapDispatchToProps now
   */
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.dispatch(courseActions.createCourse(this.state.course)); 
+    this.props.createCourse(this.state.course); 
   };
 
   render() {
@@ -52,7 +52,7 @@ Ahora hemos aclarado que esperamos que el envio se pase al componente.
 */
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired
+  createCourse: PropTypes.func.isRequired
 };
 
 /*this func determines what state is passed to our component via props (exponemos a nuestro componente)
@@ -69,13 +69,21 @@ function mapStateToProps(state) {
 
 /*mapDispatchToPropsThis lets us declare what actions to pass to our component on props
 cuando omitimos este parametro, nuestro componente obtiene una propiedad de envio
-inyectada automaticamente. Asi que podamos usarlo para despachar nuestras acciones. 
+inyectada automaticamente. Asi que podamos usarlo para despachar nuestras acciones.
+Remember, if you dont call dispatch, nothing will happen. Action creators must be called by dispatch.
+Dispatch es la funcion que notifica a redux sobre una accion.
+Since we declared mapDispatchToProps, dispatch is no longer injected. Only the actions we declared
+in mapDispatchToprops are passed in. 
 */
-
+function mapDispatchToProps(dispatch){
+  return {
+    createCourse: course => dispatch(courseActions.createCourse(course))
+  };
+}
 
 /*Usamos connect para conectar nuestros componentes a redux, container components
 toma dos parametros(mapstateprops, mpDispacthProps)(Component)
 Connect returns a function, That function then calls our component
 connect pasa automaticamente el envio si omitimos mapDispatchToProps
 */
-export default connect(mapStateToProps)(CoursesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
