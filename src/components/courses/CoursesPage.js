@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
   state = {
@@ -25,7 +26,7 @@ class CoursesPage extends React.Component {
   */
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.createCourse(this.state.course); 
+    this.props.actions.createCourse(this.state.course); 
   };
 
   render() {
@@ -52,7 +53,7 @@ Ahora hemos aclarado que esperamos que el envio se pase al componente.
 */
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
-  createCourse: PropTypes.func.isRequired
+  actions: PropTypes.object.isRequired
 };
 
 /*this func determines what state is passed to our component via props (exponemos a nuestro componente)
@@ -74,10 +75,12 @@ Remember, if you dont call dispatch, nothing will happen. Action creators must b
 Dispatch es la funcion que notifica a redux sobre una accion.
 Since we declared mapDispatchToProps, dispatch is no longer injected. Only the actions we declared
 in mapDispatchToprops are passed in. 
+bindActionCreator aceptara un objeto, por lo que puede pasar todas sus acciones aqui. Y devolvera todos
+envueltos, o simplemente puedes pasar una accion para envolverla. 
 */
 function mapDispatchToProps(dispatch){
   return {
-    createCourse: course => dispatch(courseActions.createCourse(course))
+    actions: bindActionCreators(courseActions, dispatch)
   };
 }
 
