@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
-import { rootReducer } from "./reducers";
+import rootReducer from "./reducers";
 import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
 
 /*es util tener una funcion que configura la tienda. Punto de entrada de nuestra app 
