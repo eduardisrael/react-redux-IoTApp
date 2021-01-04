@@ -1,3 +1,5 @@
+import * as types from "../actions/actionTypes";
+
 /*Reducer: function that accepts state and returns a new state
 reducers aceptan el estado y accion como sus argumentos, estado-> inicializa (matriz de cursos)
 retorn una copia actualizada del estado , podemos copiar la matriz existente, mantiene estado y luego agregar
@@ -8,7 +10,7 @@ If the reducer receives an action that it doesnt care about, it should return th
 */
 export default function courseReducer(state=[], action){
   switch(action.type) {
-    case "CREATE_COURSE":
+    case types.CREATE_COURSE:
       return [...state, {...action.course}];
     default:
       return state;

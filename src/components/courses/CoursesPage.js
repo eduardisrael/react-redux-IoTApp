@@ -56,7 +56,8 @@ CoursesPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
-/*this func determines what state is passed to our component via props (exponemos a nuestro componente)
+/*Estos dos argumentos no tienen nada magico, solo lo pasas para conectarte.
+this func determines what state is passed to our component via props (exponemos a nuestro componente)
 Y recibe dos argumentos. Por ahora la tienda es simple, devuelve solo cursos fuera del estado.
 Al declarar mapStateToprops se lo mas especifico posible, acerca de que datos expone al componente,
 solo los datos que el componente necesita 
@@ -76,7 +77,8 @@ Dispatch es la funcion que notifica a redux sobre una accion.
 Since we declared mapDispatchToProps, dispatch is no longer injected. Only the actions we declared
 in mapDispatchToprops are passed in. 
 bindActionCreator aceptara un objeto, por lo que puede pasar todas sus acciones aqui. Y devolvera todos
-envueltos, o simplemente puedes pasar una accion para envolverla. 
+envueltos, o simplemente puedes pasar una accion para envolverla. Todas nuestras acciones de Redux estan
+bajo una sola actionsProp
 */
 function mapDispatchToProps(dispatch){
   return {
