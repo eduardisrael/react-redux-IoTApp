@@ -39,6 +39,9 @@ class CoursesPage extends React.Component {
           value={this.state.course.title}
         ></input>
         <input type="submit" value="Save"></input>
+        {this.props.courses.map(course => (
+          <div key={course.title}>{course.title}</div>
+        ))}
       </form>
     );
   }
@@ -48,6 +51,7 @@ class CoursesPage extends React.Component {
 Ahora hemos aclarado que esperamos que el envio se pase al componente.
 */
 CoursesPage.propTypes = {
+  courses: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired
 };
 
