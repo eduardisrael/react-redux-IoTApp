@@ -5,45 +5,23 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
-  state = {
-    course: {
-      title: "",
-    },
-  };
-
-  /*field class, arrow functions inherit the binding context of their enclosing scope
-  keyword this hace referencia a nuestra instancia de clase, usar este enfoque para evitar
-  problemas de enlace en los controladores de eventos en los componentes de clase
-  copia del estado (inmutable), le hicimos un cambio y luego llamamos a setState con ese nuevo objeto*/
-  handleChange = (event) => {
-    const course = { ...this.state.course, title: event.target.value };
-    this.setState({ course });
-  };
-
-  /*field class, arrow function evitar problema de enlace controladores de eventos & component class
-  evitar que pagina reload
-  We dont need to call dispatch here since thats being handled in mapDispatchToProps now
+  /*load: metodo se invoca cuando se monta un componente en el DOM
+  Recuerde que esto devuelve una promesa, por lo que llamaremos catch error
   */
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.props.actions.createCourse(this.state.course); 
-  };
+  componentDidMount(){
+    this.props.actions.loadCourses().catch(error => {
+      alert("Loading courses failed" + error);
+    })
+  }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <>
         <h2>Courses</h2>
-        <h3>Add course</h3>
-        <input
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.course.title}
-        ></input>
-        <input type="submit" value="Save"></input>
         {this.props.courses.map(course => (
           <div key={course.title}>{course.title}</div>
         ))}
-      </form>
+      </>
     );
   }
 }

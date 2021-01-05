@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import rootReducer from "./reducers";
 import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
+import thunk from "redux-thunk";
 
 /*es util tener una funcion que configura la tienda. Punto de entrada de nuestra app 
 Redux middleware is a way to enhance redux's behavior, with extra functionality. 
@@ -15,6 +16,6 @@ export default function configureStore(initialState) {
   return createStore(
     rootReducer,
     initialState,
-    composeEnhancers(applyMiddleware(reduxImmutableStateInvariant()))
+    composeEnhancers(applyMiddleware(thunk, reduxImmutableStateInvariant()))
   );
 }
