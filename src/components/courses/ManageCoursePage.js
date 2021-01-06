@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
 
-/*useState: usar el operador para asignar  cualquier propiedad que 
+/*hooks estado local, redux para estados globales.
+useState: usar el operador para asignar  cualquier propiedad que 
 no hayamos desestructurado a un ubjeto llamado ...props ("Assign any 
 props I havent destructured on the left to a variable called props.*/
 function ManageCoursePage({
@@ -16,7 +17,6 @@ function ManageCoursePage({
   loadCourses,
   ...props
 }) {
-
   /*useState hook allows us to add React state to function components
   destructuracion: [variable de estado, funcion set], use state acepta un 
   argumento predeterminado, en este caso un estado central a una copia del 
@@ -43,7 +43,27 @@ function ManageCoursePage({
     }
   }, []);
 
-  return <CourseForm course={course} errors={errors} authors={authors}></CourseForm>;
+  /*this convention will allow us to update the corresponding
+  property in state with a single change handler*/
+  function handleChange(event) {
+    const { name, value } = event.target;
+    /*Im using the functional form of setState so i can safely
+    set new state that's based on the existing state*/
+    setCourse((prevCourse) => ({
+      ...prevCourse,
+      [name]: name === "authorId" ? parseInt(value, 10) : value,
+      //Js syntax, it allows us to reference a property via a variable
+    }));
+  }
+
+  return (
+    <CourseForm
+      course={course}
+      errors={errors}
+      authors={authors}
+      onChange={handleChange}
+    ></CourseForm>
+  );
 }
 
 ManageCoursePage.propTypes = {
