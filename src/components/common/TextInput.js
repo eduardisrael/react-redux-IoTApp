@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+/*reusable TextInput*/
 const TextInput = ({ name, label, onChange, placeholder, value, error }) => {
   let wrapperClass = "form-group";
   if (error && error.length > 0) {

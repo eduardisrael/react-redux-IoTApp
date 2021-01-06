@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+/*reusable SelectInput*/
 const SelectInput = ({
   name,
   label,
