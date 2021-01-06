@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { loadCourses} from "../../redux/actions/courseActions";
+import { loadCourses } from "../../redux/actions/courseActions";
 import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 
-class ManageCoursePage extends React.Component {
-  componentDidMount() {
-    //destructuracion
-    const { courses, authors, loadAuthors, loadCourses } = this.props;
-
-    //valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
+function ManageCoursePage({ courses, authors, loadAuthors, loadCourses }) {
+  /*useEffect permite controlar efectos secundarios (hooks) */
+  useEffect(() => {
+    /*valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
+    the empty array as a second argument to effect will run once when the component mounts*/
     if (courses.length === 0) {
       loadCourses().catch((error) => {
         alert("Loading courses failed" + error);
@@ -21,22 +20,20 @@ class ManageCoursePage extends React.Component {
         alert("Loading authors failed" + error);
       });
     }
-  }
+  }, []);
 
-  render() {
-    return (
-      <>
-        <h2>Manage Course</h2>
-      </>
-    );
-  }
+  return (
+    <>
+      <h2>Manage Course</h2>
+    </>
+  );
 }
 
 ManageCoursePage.propTypes = {
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
-  loadAuthors: PropTypes.func.isRequired
+  loadAuthors: PropTypes.func.isRequired,
 };
 
 /*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping*/
@@ -55,7 +52,7 @@ over module scope) Por lo tanto a los creadores de accion loadCourses y loadAuth
 vinculadas*/
 const mapDispatchToProps = {
   loadCourses,
-  loadAuthors
+  loadAuthors,
 };
 
 /*Redux connect*/
