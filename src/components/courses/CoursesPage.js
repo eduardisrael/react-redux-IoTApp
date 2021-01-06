@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
+import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
@@ -10,9 +11,21 @@ class CoursesPage extends React.Component {
   Recuerde que esto devuelve una promesa, por lo que llamaremos catch error
   */
   componentDidMount(){
-    this.props.actions.loadCourses().catch(error => {
-      alert("Loading courses failed" + error);
-    })
+    //destructuracion 
+    const { courses, authors, actions } = this.props;
+
+    //valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
+    if (courses.length === 0) {
+      actions.loadCourses().catch(error => {
+        alert("Loading courses failed" + error);
+      });
+    }
+
+    if (authors.length === 0){  
+      actions.loadAuthors().catch(error => {
+        alert("Loading authors failed" + error);
+      });
+    }
   }
 
   render() {
@@ -29,6 +42,7 @@ class CoursesPage extends React.Component {
 Ahora hemos aclarado que esperamos que el envio se pase al componente.
 */
 CoursesPage.propTypes = {
+  authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 };
@@ -38,10 +52,21 @@ this func determines what state is passed to our component via props (exponemos 
 Y recibe dos argumentos. Por ahora la tienda es simple, devuelve solo cursos fuera del estado.
 Al declarar mapStateToprops se lo mas especifico posible, acerca de que datos expone al componente,
 solo los datos que el componente necesita 
-OwnProps: es una referencia a los propios accesorios del componente*/
+OwnProps: es una referencia a los propios accesorios del componente
+let's add the authors name to each curse. We need both course and author before we can do this mapping
+*/
 function mapStateToProps(state) {
   return {
-    courses: state.courses,
+    courses: 
+      state.authors.length === 0
+      ? []
+      : state.courses.map(course => {
+          return {
+            ...course,
+            authorName: state.authors.find(a => a.id ===course.authorId).name
+          };
+        }),
+    authors: state.authors
   };
 }
 
@@ -59,7 +84,10 @@ bajo una sola actionsProp
 */
 function mapDispatchToProps(dispatch){
   return {
-    actions: bindActionCreators(courseActions, dispatch)
+    actions: {
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+      loadAuthors: bindActionCreators(authorActions.loadAuthors,dispatch)
+    }
   };
 }
 

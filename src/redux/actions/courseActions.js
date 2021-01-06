@@ -1,5 +1,5 @@
 import * as types from "./actionTypes";
-import * as courseAPi from "../../api/courseApi";
+import * as courseApi from "../../api/courseApi";
 
 /* Action: Contendra nuestros creadores de acciones, retorna objeto plano -> type property and payload
 payload: course left sintaxis abreviada del objeto (coincide). Now we cant make a typo. 
@@ -20,7 +20,7 @@ Hace una llamada a una promesa (then). loadCoursesSucess (action)
 */
 export function loadCourses() {
   return function (dispatch) {
-    return courseAPi
+    return courseApi
       .getCourses()
       .then((courses) => {
         dispatch(loadCourseSuccess(courses));
