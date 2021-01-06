@@ -1,10 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { loadCourses } from "../../redux/actions/courseActions";
 import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
+import CourseForm from "./CourseForm";
+import { newCourse } from "../../../tools/mockData";
 
-function ManageCoursePage({ courses, authors, loadAuthors, loadCourses }) {
+/*useState: usar el operador para asignar  cualquier propiedad que 
+no hayamos desestructurado a un ubjeto llamado ...props ("Assign any 
+props I havent destructured on the left to a variable called props.*/
+function ManageCoursePage({
+  courses,
+  authors,
+  loadAuthors,
+  loadCourses,
+  ...props
+}) {
+
+  /*useState hook allows us to add React state to function components
+  destructuracion: [variable de estado, funcion set], use state acepta un 
+  argumento predeterminado, en este caso un estado central a una copia del 
+  curso pasado en props*/
+  const [course, setCourse] = useState({ ...props.course });
+  /*este estado mantendra cualquier eroor que ocurra cuando ejecutemos
+  la validacion*/
+  const [errors, setErrors] = useState({});
+
   /*useEffect permite controlar efectos secundarios (hooks) */
   useEffect(() => {
     /*valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
@@ -22,14 +43,11 @@ function ManageCoursePage({ courses, authors, loadAuthors, loadCourses }) {
     }
   }, []);
 
-  return (
-    <>
-      <h2>Manage Course</h2>
-    </>
-  );
+  return <CourseForm course={course} errors={errors} authors={authors}></CourseForm>;
 }
 
 ManageCoursePage.propTypes = {
+  course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
@@ -39,6 +57,7 @@ ManageCoursePage.propTypes = {
 /*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping*/
 function mapStateToProps(state) {
   return {
+    course: newCourse,
     courses: state.courses,
     authors: state.authors,
   };
