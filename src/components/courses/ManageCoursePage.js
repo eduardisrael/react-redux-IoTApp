@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as courseActions from "../../redux/actions/courseActions";
-import * as authorActions from "../../redux/actions/authorActions";
+import { loadCourses} from "../../redux/actions/courseActions";
+import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 
 class ManageCoursePage extends React.Component {
@@ -47,12 +47,16 @@ function mapStateToProps(state) {
   };
 }
 
-/*lets use the object form of mapDispatchToProps to simplify our code*/
+/*lets use the object form of mapDispatchToProps to simplify our code, warning: these names are the same 
+as the unbound thunks we imported at the top, this passes the *bound* action creator in on props, 
+under the same name.
+destructuracion concisa : the bound action passed in on props "wins" (function scope takes precedence
+over module scope) Por lo tanto a los creadores de accion loadCourses y loadAuthor estan correctamente
+vinculadas*/
 const mapDispatchToProps = {
-  loadCourses: courseActions.loadCourses,
-  loadAuthors: authorActions.loadAuthors
+  loadCourses,
+  loadAuthors
 };
-
 
 /*Redux connect*/
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
