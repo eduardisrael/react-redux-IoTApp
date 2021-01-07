@@ -5,6 +5,7 @@ import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
+import Spinner from "../common/Spinner";
 
 /*hooks estado local, redux para estados globales.
 useState: usar el operador para asignar  cualquier propiedad que 
@@ -76,14 +77,14 @@ function ManageCoursePage({
     });
   }
 
-  return (
+  return authors.length === 0 || courses.length === 0 ? (<Spinner/>) : (
     <CourseForm
       course={course}
       errors={errors}
       authors={authors}
       onChange={handleChange}
       onSave={handleSave}
-    ></CourseForm>
+    />
   );
 }
 

@@ -1,5 +1,6 @@
 import * as types from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
+import { beginApiCall } from "./apiStatusActions";
 
 /* Action: Contendra nuestros creadores de acciones, retorna objeto plano -> type property and payload
 payload: course left sintaxis abreviada del objeto (coincide). Now we cant make a typo. 
@@ -22,6 +23,7 @@ Hace una llamada a una promesa (then). loadCoursesSucess (action)
 */
 export function loadCourses() {
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .getCourses()
       .then((courses) => {
@@ -37,6 +39,7 @@ export function loadCourses() {
 export function saveCourse(course) {
   //eslint-disable-next-line no-unused-vars
   return function (dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .saveCourse(course)
       .then(savedCourse => {

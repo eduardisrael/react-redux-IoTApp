@@ -9,26 +9,25 @@ import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
 
 class CoursesPage extends React.Component {
-
   /*field class*/
-  state = {redirectToAddCoursePage: false};
+  state = { redirectToAddCoursePage: false };
 
   /*load: metodo se invoca cuando se monta un componente en el DOM
   Recuerde que esto devuelve una promesa, por lo que llamaremos catch error
   */
-  componentDidMount(){
-    //destructuracion 
+  componentDidMount() {
+    //destructuracion
     const { courses, authors, actions } = this.props;
 
     //valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
     if (courses.length === 0) {
-      actions.loadCourses().catch(error => {
+      actions.loadCourses().catch((error) => {
         alert("Loading courses failed" + error);
       });
     }
 
-    if (authors.length === 0){  
-      actions.loadAuthors().catch(error => {
+    if (authors.length === 0) {
+      actions.loadAuthors().catch((error) => {
         alert("Loading authors failed" + error);
       });
     }
@@ -42,15 +41,21 @@ class CoursesPage extends React.Component {
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
         <h2>Courses</h2>
-        <Spinner />
-        <button
-          style={{ marginBottom: 20 }}
-          className="btn btn-primary add-course"
-          onClick={() => this.setState({redirectToAddCoursePage: true})}
-        >
-          Add Course
-        </button>
-        <CourseList courses={this.props.courses}/>
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <button
+              style={{ marginBottom: 20 }}
+              className="btn btn-primary add-course"
+              onClick={() => this.setState({ redirectToAddCoursePage: true })}
+            >
+              Add Course
+            </button>
+
+            <CourseList courses={this.props.courses} />
+          </>
+        )}
       </>
     );
   }
@@ -62,7 +67,8 @@ Ahora hemos aclarado que esperamos que el envio se pase al componente.
 CoursesPage.propTypes = {
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 /*Estos dos argumentos no tienen nada magico, solo lo pasas para conectarte.
@@ -75,19 +81,20 @@ let's add the authors name to each curse. We need both course and author before 
 */
 function mapStateToProps(state) {
   return {
-    courses: 
+    courses:
       state.authors.length === 0
-      ? []
-      : state.courses.map(course => {
-          return {
-            ...course,
-            authorName: state.authors.find(a => a.id ===course.authorId).name
-          };
-        }),
-    authors: state.authors
+        ? []
+        : state.courses.map((course) => {
+            return {
+              ...course,
+              authorName: state.authors.find((a) => a.id === course.authorId)
+                .name,
+            };
+          }),
+    authors: state.authors,
+    loading: state.apiCallsInProgress > 0,
   };
 }
-
 
 /*mapDispatchToPropsThis lets us declare what actions to pass to our component on props
 cuando omitimos este parametro, nuestro componente obtiene una propiedad de envio
@@ -100,12 +107,12 @@ bindActionCreator aceptara un objeto, por lo que puede pasar todas sus acciones 
 envueltos, o simplemente puedes pasar una accion para envolverla. Todas nuestras acciones de Redux estan
 bajo una sola actionsProp
 */
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     actions: {
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
-      loadAuthors: bindActionCreators(authorActions.loadAuthors,dispatch)
-    }
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+    },
   };
 }
 
