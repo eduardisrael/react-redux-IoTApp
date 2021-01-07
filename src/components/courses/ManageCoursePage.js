@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { loadCourses } from "../../redux/actions/courseActions";
+import { loadCourses, saveCourse } from "../../redux/actions/courseActions";
 import { loadAuthors } from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
@@ -9,12 +9,16 @@ import { newCourse } from "../../../tools/mockData";
 /*hooks estado local, redux para estados globales.
 useState: usar el operador para asignar  cualquier propiedad que 
 no hayamos desestructurado a un ubjeto llamado ...props ("Assign any 
-props I havent destructured on the left to a variable called props.*/
+props I havent destructured on the left to a variable called props.
+Now calling saveCourse in our component will call the saveCourse function
+we just bound to dispatch in mapDispatchToProps
+*/
 function ManageCoursePage({
   courses,
   authors,
   loadAuthors,
   loadCourses,
+  saveCourse,
   ...props
 }) {
   /*useState hook allows us to add React state to function components
@@ -56,12 +60,20 @@ function ManageCoursePage({
     }));
   }
 
+  /*this is passed in on props, so it's already bound to dispatch. The bound saveCourse
+  on props takes precedence over the unbound saveCourse thunk at the top*/
+  function handleSave(event) {
+    event.preventDefault();
+    saveCourse(course);
+  }
+
   return (
     <CourseForm
       course={course}
       errors={errors}
       authors={authors}
       onChange={handleChange}
+      onSave={handleSave}
     ></CourseForm>
   );
 }
@@ -72,6 +84,7 @@ ManageCoursePage.propTypes = {
   courses: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
+  saveCourse: PropTypes.func.isRequired
 };
 
 /*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping*/
@@ -92,6 +105,7 @@ vinculadas*/
 const mapDispatchToProps = {
   loadCourses,
   loadAuthors,
+  saveCourse
 };
 
 /*Redux connect*/
