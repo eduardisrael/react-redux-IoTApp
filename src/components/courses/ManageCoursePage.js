@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import CourseForm from "./CourseForm";
 import { newCourse } from "../../../tools/mockData";
 import Spinner from "../common/Spinner";
+import { toast } from "react-toastify";
 
 /*hooks estado local, redux para estados globales.
 useState: usar el operador para asignar  cualquier propiedad que 
@@ -31,6 +32,9 @@ function ManageCoursePage({
   /*este estado mantendra cualquier eroor que ocurra cuando ejecutemos
   la validacion*/
   const [errors, setErrors] = useState({});
+
+  //ocultar save y mejorar UX, state local
+  const [saving, setSaving] = useState(false);
 
   /*useEffect permite controlar efectos secundarios (hooks) */
   useEffect(() => {
@@ -72,7 +76,9 @@ function ManageCoursePage({
   */
   function handleSave(event) {
     event.preventDefault();
+    setSaving(true);
     saveCourse(course).then( () => {
+      toast.success("Course saved.")
       history.push("/courses");
     });
   }
@@ -84,6 +90,7 @@ function ManageCoursePage({
       authors={authors}
       onChange={handleChange}
       onSave={handleSave}
+      saving={saving}
     />
   );
 }
