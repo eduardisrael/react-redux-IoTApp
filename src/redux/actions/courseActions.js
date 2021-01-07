@@ -17,6 +17,10 @@ export function updateCourseSuccess(course) {
   return { type: types.UPDATE_COURSE_SUCCESS, course };
 }
 
+export function deleteCourseOptimistic(course) {
+  return { type: types.DELETE_COURSE_OPTIMISTIC, course };
+}
+
 /*thunk(middleware), lets load courses when the app initially loads. Redux thunk injects dispatch so we dont have too.
 cada thunk devuelve una funcion que acepta el envio como argumento. esta funcion es usada por el middleware.
 Hace una llamada a una promesa (then). loadCoursesSucess (action)
@@ -52,5 +56,15 @@ export function saveCourse(course) {
         dispatch(apiCallError(error));
         throw error;
       });
+  };
+}
+
+/*thunk, differences, inmmediately dispatching deleteCourse, not dispatching beginApiCall, Optimistic Delete*/
+export function deleteCourse(course) {
+  return function(dispatch) {
+    // Doing optimistic delete, so not dispatching begin/end api call
+    // actions, or apiCallError action since we're not showing the loading status for this.
+    dispatch(deleteCourseOptimistic(course));
+    return courseApi.deleteCourse(course.id);
   };
 }
