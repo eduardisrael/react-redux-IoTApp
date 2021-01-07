@@ -3,15 +3,17 @@ import * as courseApi from "../../api/courseApi";
 
 /* Action: Contendra nuestros creadores de acciones, retorna objeto plano -> type property and payload
 payload: course left sintaxis abreviada del objeto (coincide). Now we cant make a typo. 
-We get compile-time safety too "CREATE COURSE"
-*/
-export function createCourse(course) {
-  return { type: types.CREATE_COURSE, course };
-}
-
-//action
+We get compile-time safety too "CREATE COURSE" action*/
 export function loadCourseSuccess(courses) {
   return { type: types.LOAD_COURSES_SUCCESS, courses };
+}
+
+export function createCourseSuccess(course){
+  return { type: types.CREATE_COURSE_SUCCESS, course}
+}
+
+export function updateCourseSuccess(course) {
+  return { type: types.UPDATE_COURSE_SUCCESS, course };
 }
 
 /*thunk(middleware), lets load courses when the app initially loads. Redux thunk injects dispatch so we dont have too.
@@ -24,6 +26,23 @@ export function loadCourses() {
       .getCourses()
       .then((courses) => {
         dispatch(loadCourseSuccess(courses));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
+
+/*thunk*/
+export function saveCourse(course) {
+  //eslint-disable-next-line no-unused-vars
+  return function (dispatch) {
+    return courseApi
+      .saveCourse(course)
+      .then(savedCourse => {
+        course.id
+          ? dispatch(updateCourseSuccess(savedCourse))
+          : dispatch(createCourseSuccess(savedCourse));
       })
       .catch((error) => {
         throw error;
