@@ -45,7 +45,7 @@ function ManageCoursePage({
         alert("Loading courses failed" + error);
       });
     } else {
-      setCourse({...props.course}); //this will copy the course passed in on props to state anytime a new
+      setCourse({ ...props.course }); //this will copy the course passed in on props to state anytime a new
       //course is passed in
     }
 
@@ -77,13 +77,20 @@ function ManageCoursePage({
   function handleSave(event) {
     event.preventDefault();
     setSaving(true);
-    saveCourse(course).then( () => {
-      toast.success("Course saved.")
-      history.push("/courses");
-    });
+    saveCourse(course)
+      .then(() => {
+        toast.success("Course saved.");
+        history.push("/courses");
+      })
+      .catch((error) => {
+        setSaving(false); //this way the user can try submitting the form again after error occurs.
+        setErrors({ onSave: error.message });
+      });
   }
 
-  return authors.length === 0 || courses.length === 0 ? (<Spinner/>) : (
+  return authors.length === 0 || courses.length === 0 ? (
+    <Spinner />
+  ) : (
     <CourseForm
       course={course}
       errors={errors}
@@ -103,14 +110,14 @@ ManageCoursePage.propTypes = {
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
   saveCourse: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 /*find obtener curso solicitado, si no se encuentra devuelve null, this is a selector. 
 It selects data from the redux store, you could declare this in the course reducer for easy reuse.
-For performance you could memoize using reselect */ 
+For performance you could memoize using reselect */
 export function getCourseBySlug(courses, slug) {
-  return courses.find(course => course.slug === slug) || null;
+  return courses.find((course) => course.slug === slug) || null;
 }
 
 /*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping
@@ -120,12 +127,12 @@ Remember mapStatetoprops runs every time the redux store changes, so when course
 we call getCourseByslug*/
 function mapStateToProps(state, ownProps) {
   /*access in mapState - slug - App.js*/
-  const slug=ownProps.match.params.slug;
+  const slug = ownProps.match.params.slug;
   /*establecer si hay un curso o uno vacio*/
-  const course = 
-    slug && state.courses.length >0 
-    ? getCourseBySlug(state.courses, slug) 
-    : newCourse;
+  const course =
+    slug && state.courses.length > 0
+      ? getCourseBySlug(state.courses, slug)
+      : newCourse;
   return {
     course,
     courses: state.courses,
@@ -142,7 +149,7 @@ vinculadas*/
 const mapDispatchToProps = {
   loadCourses,
   loadAuthors,
-  saveCourse
+  saveCourse,
 };
 
 /*Redux connect*/
