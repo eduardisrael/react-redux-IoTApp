@@ -7,15 +7,15 @@ const Header = () => {
   return (
     <nav>
       <NavLink to="/" activeStyle={activeStyle} exact>
-        Home
+        Inicio
       </NavLink>
       {" | "}
       <NavLink to="/courses" activeStyle={activeStyle}>
-        Courses
+        Cursos
       </NavLink>
       {" | "}
       <NavLink to="/about" activeStyle={activeStyle}>
-        About
+        Acerca de
       </NavLink>
     </nav>
   );

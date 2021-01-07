@@ -23,24 +23,24 @@ class CoursesPage extends React.Component {
     //valida que carga cursos una sola vez, mejora performance(eficiente),no hacemos solicitudes adicionales.
     if (courses.length === 0) {
       actions.loadCourses().catch((error) => {
-        alert("Loading courses failed" + error);
+        alert("Error cargando cursos" + error);
       });
     }
 
     if (authors.length === 0) {
       actions.loadAuthors().catch((error) => {
-        alert("Loading authors failed" + error);
+        alert("Error cargando autores" + error);
       });
     }
   }
 
   //async/await uses promises. so async/wait and promises can interact
   handleDeleteCourse = async course => {
-    toast.success("Course deleted");
+    toast.success("Curso eliminado");
     try {
       await this.props.actions.deleteCourse(course);
     } catch (error) {
-      toast.error("Delete failed. " + error.message, { autoClose: false });
+      toast.error("Error, no se pudo eliminar. " + error.message, { autoClose: false });
     }
   };
 
@@ -51,7 +51,7 @@ class CoursesPage extends React.Component {
     return (
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
-        <h2>Courses</h2>
+        <h2>Cursos</h2>
         {this.props.loading ? (
           <Spinner />
         ) : (
@@ -61,7 +61,7 @@ class CoursesPage extends React.Component {
               className="btn btn-primary add-course"
               onClick={() => this.setState({ redirectToAddCoursePage: true })}
             >
-              Add Course
+              Agregar Curso
             </button>
 
             <CourseList

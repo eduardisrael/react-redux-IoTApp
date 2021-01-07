@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const HomePage = () => (
     <div className="jumbotron">
-        <h1> Administration </h1>
-        <p> React, Redux and React Router for ultra-responsive web apps.</p>
+        <h1> Administrador </h1>
+        <p> Sistema para gestionar proyectos de investigación IoT - Research Lab at ESPOL</p>
         <Link to="about" className="btn btn-primary btn-lg">
-            Learn more
+            Conocer más
         </Link>
     </div>
 );

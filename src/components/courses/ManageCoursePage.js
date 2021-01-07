@@ -93,7 +93,7 @@ function ManageCoursePage({
     setSaving(true);
     saveCourse(course)
       .then(() => {
-        toast.success("Course saved.");
+        toast.success("Se guardo el curso correctamente.");
         history.push("/courses");
       })
       .catch((error) => {
