@@ -25,7 +25,7 @@ function ManageCoursePage({
   /*useState hook allows us to add React state to function components
   destructuracion: [variable de estado, funcion set], use state acepta un 
   argumento predeterminado, en este caso un estado central a una copia del 
-  curso pasado en props*/
+  curso pasado en props. Goal: when our props change, we need to update our components state*/
   const [course, setCourse] = useState({ ...props.course });
   /*este estado mantendra cualquier eroor que ocurra cuando ejecutemos
   la validacion*/
@@ -39,6 +39,9 @@ function ManageCoursePage({
       loadCourses().catch((error) => {
         alert("Loading courses failed" + error);
       });
+    } else {
+      setCourse({...props.course}); //this will copy the course passed in on props to state anytime a new
+      //course is passed in
     }
 
     if (authors.length === 0) {
@@ -46,7 +49,7 @@ function ManageCoursePage({
         alert("Loading authors failed" + error);
       });
     }
-  }, []);
+  }, [props.course]);
 
   /*this convention will allow us to update the corresponding
   property in state with a single change handler*/
@@ -95,10 +98,28 @@ ManageCoursePage.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-/*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping*/
-function mapStateToProps(state) {
+/*find obtener curso solicitado, si no se encuentra devuelve null, this is a selector. 
+It selects data from the redux store, you could declare this in the course reducer for easy reuse.
+For performance you could memoize using reselect */ 
+export function getCourseBySlug(courses, slug) {
+  return courses.find(course => course.slug === slug) || null;
+}
+
+/*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping
+Siempre estamos pasando un curso vacio, Goal: read the url to determine wheter the user is trying
+to create a new course or edit an existing course, segundo parametro util ownProps.
+Remember mapStatetoprops runs every time the redux store changes, so when courses are available,
+we call getCourseByslug*/
+function mapStateToProps(state, ownProps) {
+  /*access in mapState - slug - App.js*/
+  const slug=ownProps.match.params.slug;
+  /*establecer si hay un curso o uno vacio*/
+  const course = 
+    slug && state.courses.length >0 
+    ? getCourseBySlug(state.courses, slug) 
+    : newCourse;
   return {
-    course: newCourse,
+    course,
     courses: state.courses,
     authors: state.authors,
   };
