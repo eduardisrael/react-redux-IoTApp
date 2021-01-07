@@ -34,11 +34,14 @@ class CoursesPage extends React.Component {
     }
   }
 
-  handleDeleteCourse = (course) => {
+  //async/await uses promises. so async/wait and promises can interact
+  handleDeleteCourse = async course => {
     toast.success("Course deleted");
-    this.props.actions.deleteCourse(course).catch(error => {
-      toast.error("Delete failed. " + error.message, { autoClose: false});
-    });
+    try {
+      await this.props.actions.deleteCourse(course);
+    } catch (error) {
+      toast.error("Delete failed. " + error.message, { autoClose: false });
+    }
   };
 
   /*render tiene un effect secundario, Si el valor en estado es True, se redirigira a la URL del
