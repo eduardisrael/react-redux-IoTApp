@@ -5,8 +5,13 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
+import { Redirect } from "react-router-dom";
 
 class CoursesPage extends React.Component {
+
+  /*field class*/
+  state = {redirectToAddCoursePage: false};
+
   /*load: metodo se invoca cuando se monta un componente en el DOM
   Recuerde que esto devuelve una promesa, por lo que llamaremos catch error
   */
@@ -28,10 +33,22 @@ class CoursesPage extends React.Component {
     }
   }
 
+  /*render tiene un effect secundario, Si el valor en estado es True, se redirigira a la URL del
+  curso agregar. 
+  */
   render() {
     return (
       <>
+        {this.state.redirectToAddCoursePage && <Redirect to="/course"/>}
         <h2>Courses</h2>
+
+        <button
+          style={{ marginBottom: 20 }}
+          className="btn btn-primary add-course"
+          onClick={() => this.setState({redirectToAddCoursePage: true})}
+        >
+          Add Course
+        </button>
         <CourseList courses={this.props.courses}/>
       </>
     );
