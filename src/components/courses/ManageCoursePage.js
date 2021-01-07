@@ -69,6 +69,19 @@ function ManageCoursePage({
     }));
   }
 
+  function formIsValid() {
+    const { title, authorId, category } = course;
+    const errors = {};
+
+    if (!title) errors.title = "Title is required.";
+    if (!authorId) errors.author = "Author is required";
+    if (!category) errors.category = "Category is required";
+
+    setErrors(errors);
+    // Form is valid if the errors object still has no properties
+    return Object.keys(errors).length === 0;
+  }
+
   /*this is passed in on props, so it's already bound to dispatch. The bound saveCourse
   on props takes precedence over the unbound saveCourse thunk at the top.
   .then (promesa) que despues que se guardo, use el historial de reactrouter para cambiar la URL
@@ -76,6 +89,7 @@ function ManageCoursePage({
   */
   function handleSave(event) {
     event.preventDefault();
+    if (!formIsValid()) return;
     setSaving(true);
     saveCourse(course)
       .then(() => {
