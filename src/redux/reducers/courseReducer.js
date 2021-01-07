@@ -9,12 +9,18 @@ reductor en particular, por lo tanto actualizara nuestra tienda Redux agregando 
 action.course a nuestra tienda redux.
 If the reducer receives an action that it doesnt care about, it should return the unchanged state.
 loadCoursesSuccess: ya que lo que se devuelve de nuestra api, reemplazara lo que estaba en nuestro estado,
-todo lo que tenemos que hacer es devolver los cursos aqui. reductor que maneja la accion.*/
+todo lo que tenemos que hacer es devolver los cursos aqui. reductor que maneja la accion.
+update: Map return a new Array. Im replacing the element with the matching course.id
+*/
 
 export default function courseReducer(state=initialState.courses, action){
   switch(action.type) {
-    case types.CREATE_COURSE:
+    case types.CREATE_COURSE_SUCCESS:
       return [...state, {...action.course}];
+    case types.UPDATE_COURSE_SUCCESS:
+      return state.map(course => 
+        course.id === action.course.id ? action.course: course
+      ); 
     case types.LOAD_COURSES_SUCCESS:
       return action.courses 
     default:
