@@ -19,6 +19,7 @@ function ManageCoursePage({
   loadAuthors,
   loadCourses,
   saveCourse,
+  history,
   ...props
 }) {
   /*useState hook allows us to add React state to function components
@@ -61,10 +62,15 @@ function ManageCoursePage({
   }
 
   /*this is passed in on props, so it's already bound to dispatch. The bound saveCourse
-  on props takes precedence over the unbound saveCourse thunk at the top*/
+  on props takes precedence over the unbound saveCourse thunk at the top.
+  .then (promesa) que despues que se guardo, use el historial de reactrouter para cambiar la URL
+  a la courseListPage. 
+  */
   function handleSave(event) {
     event.preventDefault();
-    saveCourse(course);
+    saveCourse(course).then( () => {
+      history.push("/courses");
+    });
   }
 
   return (
@@ -78,13 +84,15 @@ function ManageCoursePage({
   );
 }
 
+/*Any component loaded via <Route> gets history passed in on props from react router*/
 ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
-  saveCourse: PropTypes.func.isRequired
+  saveCourse: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 /*determinan a que estado y acciones nos gustaria acceder en nuestro componente, Redux Mapping*/
