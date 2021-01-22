@@ -1,0 +1,5 @@
+[{"id":1,"first_name":"Alexander","last_name":"Vallejo","questions":"TypeError: Cannot read property 'map' of undefined - Component part 2, Please help!"},
+{"id":2,"first_name":"Israel","last_name":"Pasaca","questions":"My content is rendered but i still have console errors please help"},
+{"id":3,"first_name":"Allison","last_name":"Barrezueta","questions":"how to install the create react app now??"},
+{"id":4,"first_name":"Jaime","last_name":"Alarcon","questions":"functions in render component vs class level?"}
+]
