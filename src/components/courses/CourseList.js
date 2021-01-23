@@ -20,7 +20,7 @@ const CourseList = ({ courses, onDeleteClick }) => (
             <td>
               <a
                 className="btn btn-light"
-                href={"detail/" + course.slug}
+                href={"" + course.slug}
               >
                 Ver
               </a>
